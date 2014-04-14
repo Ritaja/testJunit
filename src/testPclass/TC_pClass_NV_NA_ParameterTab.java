@@ -24,6 +24,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.Select;
 
 import excelManipulations.ReaderImpl;
 
@@ -46,11 +47,12 @@ public class TC_pClass_NV_NA_ParameterTab {
 		
 		System.setProperty("webdriver.chrome.driver", "Lib/chromedriver.exe");
 		 driver = new ChromeDriver();
-		 driver.get("http://profectus/NanoSenchaTouch2.1.1%20(Sprint%2027%2004-03-14)/index-debug.html?demo=On,client=Desktop");
+		 driver.get("http://profectus/NanoSenchaTouch2.1.1%20(Sprint%2029%2003-04-14)/index-debug.html?demo=On&client=Desktop");
 		 driver.manage().timeouts().implicitlyWait(100000, TimeUnit.SECONDS);
 		 
 		 
-		 WebElement element = driver.findElement(By.xpath("//div[text()='P-Class']"));
+		 //WebElement element = driver.findElement(By.xpath("//div[text()='P-Class']"));
+		 WebElement element = driver.findElement(By.xpath("//div[contains(@id,'ext-element-40')]"));
 		element.click();
 		
 	}
@@ -69,10 +71,7 @@ public class TC_pClass_NV_NA_ParameterTab {
 	@Before
 	public void setUp() throws Exception {
 		Thread.sleep(1000);
-		element1 = driver.findElement(By.xpath("//div[text()='NanoVolume']"));
-		element1.click();
-		Thread.sleep(1000);
-		element1 = driver.findElement(By.xpath("//div[text()='Nucleic Acids']"));
+		element1 = driver.findElement(By.xpath("//div[text()='Nucleic Acid']"));
 		element1.click();
 		Thread.sleep(1000);
 	}
@@ -89,8 +88,26 @@ public class TC_pClass_NV_NA_ParameterTab {
 
 	@Test
 	public void TC_pClass_NV_NA_dsDNA_parameters() throws InterruptedException, IOException {
-		element1 = driver.findElement(By.xpath("//div[text()='dsDNA']"));
-		element1.click();
+		// ALWAYS use dynamic element search.
+		
+		//element1 = driver.findElement(By.xpath("//span[text()='dsDNA')]"));
+		//element1 = driver.findElement(By.id(""));
+		//Select select = new Select(driver.findElement(By.xpath("//span[text()='dsDNA']")));
+		//WebElement selectorElement = driver.findElement(By.xpath("//div[contains(@id,'ext-thumb-3')]"));
+		//WebElement selectorElement = driver.findElement(By.xpath("//div[contains(@id,'ext-input-12')]"));
+		WebElement selectorElement = driver.findElement(By.xpath("//div[contains(@class,'x-button-icon')]"));
+		selectorElement.click();
+		try {
+		    //trying to get the "select option"
+		    WebElement elementOfInterest = driver.findElement(By.xpath("//span[contains(@class='x-list-label')]"));
+		    //this would select the option
+			elementOfInterest.click();
+		} catch (NoSuchElementException e) { 
+		    System.out.println("jammed!!");
+		}
+		
+		//select.deselectAll();
+		//select.selectByVisibleText("ssDNA");
 		Thread.sleep(1000);
 		System.out.println(name.getMethodName());
 		
@@ -104,17 +121,22 @@ public class TC_pClass_NV_NA_ParameterTab {
 			
 			 try {
 				 driver.manage().timeouts().implicitlyWait(0, TimeUnit.MILLISECONDS);
-				 System.out.println(str);
+				 
 				 driver.findElement(By.xpath("//span[text()='"+str+"']"));
 				 driver.manage().timeouts().implicitlyWait(10, TimeUnit.MILLISECONDS);
-				 finalassert = finalassert & true; 
+				 System.out.println(str);
+				 finalassert = finalassert && true; 
 				  } catch (NoSuchElementException ignored) {
 					  System.out.println(str);
-					  finalassert = finalassert & false; 
+					 
+					  finalassert = false  ; 
+					 
+					  
 				  }
 			
 			
 		}
-		assert(finalassert);
+		 System.out.println(finalassert);
+		assertTrue(finalassert);
 	}
 }
